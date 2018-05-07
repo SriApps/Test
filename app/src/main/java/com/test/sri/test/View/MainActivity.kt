@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity(), MainContract.MainView {
 
         if(data!=null){
             outState!!.putParcelable("sri",data)
-            outState!!.putInt("viewPagerPosition",viewpager.currentItem)
+            outState.putInt("viewPagerPosition",viewpager.currentItem)
             super.onSaveInstanceState(outState)
         }
 

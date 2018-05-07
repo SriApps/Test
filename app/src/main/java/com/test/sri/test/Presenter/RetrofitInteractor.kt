@@ -28,7 +28,7 @@ class RetrofitInteractor(var mainview: MainContract.MainView) : MainContract.Mai
             override fun onFailure(call: Call<FlickrDataModel>?, t: Throwable?) {
             }
             override fun onResponse(call: Call<FlickrDataModel>?, response: Response<FlickrDataModel>?) {
-                data = response!!.body()!!
+                data = response?.body()!!
                 if (data != null ) {
                     //This will call the view method to display data on the relevant layout
                     mainview.imageList(data)

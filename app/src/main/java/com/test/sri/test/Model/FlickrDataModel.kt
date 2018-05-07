@@ -56,44 +56,59 @@ data class Item(
         val author_id: String,
         val tags: String
 ) : Parcelable {
-    constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString(),
-            TODO("media"),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString()) {
+    constructor(source: Parcel) : this(
+            source.readString(),
+            source.readString(),
+            source.readParcelable<Media>(Media::class.java.classLoader),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            source.readString()
+    )
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeString(title)
+        writeString(link)
+        writeParcelable(media, 0)
+        writeString(date_taken)
+        writeString(description)
+        writeString(published)
+        writeString(author)
+        writeString(author_id)
+        writeString(tags)
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(title)
-        parcel.writeString(link)
-        parcel.writeString(date_taken)
-        parcel.writeString(description)
-        parcel.writeString(published)
-        parcel.writeString(author)
-        parcel.writeString(author_id)
-        parcel.writeString(tags)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<Item> {
-        override fun createFromParcel(parcel: Parcel): Item {
-            return Item(parcel)
-        }
-
-        override fun newArray(size: Int): Array<Item?> {
-            return arrayOfNulls(size)
+    companion object {
+        @JvmField
+        val CREATOR: Parcelable.Creator<Item> = object : Parcelable.Creator<Item> {
+            override fun createFromParcel(source: Parcel): Item = Item(source)
+            override fun newArray(size: Int): Array<Item?> = arrayOfNulls(size)
         }
     }
 }
 
 data class Media(
-		val m: String
-)
+        val m: String
+) : Parcelable {
+    constructor(source: Parcel) : this(
+            source.readString()
+    )
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeString(m)
+    }
+
+    companion object {
+        @JvmField
+        val CREATOR: Parcelable.Creator<Media> = object : Parcelable.Creator<Media> {
+            override fun createFromParcel(source: Parcel): Media = Media(source)
+            override fun newArray(size: Int): Array<Media?> = arrayOfNulls(size)
+        }
+    }
+}
